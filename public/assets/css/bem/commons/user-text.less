@@ -1,0 +1,46 @@
+.user-text{
+  color: @mainColor;
+  .fonts-native(14px,400,@pfont,18px);
+  &--700{
+    font-weight: 700;
+  }
+  &--24{
+    font-size: 24px;
+    line-height: 32px;
+  }
+  &--list{
+    padding-left: 40px;
+    position: relative;
+    &:after{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-image: url('../../../images/content/warning_line.svg');
+      width: 24px;
+      height: 24px;
+    }
+    &-item{
+      font-size: 12px;
+      position: relative;
+      &:before{
+        content: "\2022 ";
+        position: absolute;
+        top: 0;
+        left: -9px;
+      }
+    }
+  }
+  &--mt{
+    &-15{
+      margin-top: 15px;
+    }
+  }
+  &--sm{
+    &-18{
+      @media (max-width: @screen-md){
+        .fonts-native(18px)
+      }
+    }
+  }
+}

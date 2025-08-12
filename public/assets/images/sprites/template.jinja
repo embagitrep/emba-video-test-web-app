@@ -1,0 +1,14 @@
+/* glue: {{ version }} hash: {{ hash }} */
+@sprite-height: {{ height }}px;
+@sprite-width: {{ width }}px;
+
+{% for image in images %}
+	@{{ image.label }}: '{{ image.label }}';
+	@{{ image.label }}-fname: '{{ image.filename }}';
+	@{{ image.label }}-x: {{ image.x }}px;
+	@{{ image.label }}-y: {{ image.y }}px;
+	@{{ image.label }}-2x: {{ image.x*2 }}px;
+	@{{ image.label }}-2y: {{ image.y*2 }}px;
+	@{{ image.label }}-width: {{ image.width }}px;
+	@{{ image.label }}-height: {{ image.height }}px;
+{% endfor %}

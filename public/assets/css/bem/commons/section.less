@@ -1,0 +1,109 @@
+.section{
+  @media (max-width: @screen-md){
+    padding: 0 20px;
+  }
+  &__separated{
+    &--2{
+      display: flex;
+      width: 100%;
+      align-items: center;
+      @media (max-width: @screen-md){
+        flex-wrap: wrap;
+      }
+    }
+    &--item{
+      height: 100vh;
+      @media (max-width: @screen-md){
+        height: auto;
+      }
+      &--2{
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+      }
+      &-h{
+        max-width: 485px;
+        width: 485px;
+        &-2{
+          width: 751px;
+        }
+      }
+      &--2{
+        width: 50%;
+        @media (max-width: @screen-md){
+          width: 100%;
+        }
+      }
+      &-gray{
+        background: @grey;
+      }
+    }
+  }
+  &__header{
+    display: flex;
+    align-items: center;
+    &--bordered{
+      border-bottom: 1px solid rgba(233, 242, 245, 1);
+    }
+    &--center{
+      justify-content: center;
+    }
+    &--img{
+      width: 100%;
+      &-h {
+        max-width: 130px;
+        position: relative;
+        &-border{
+          margin-right: 30px;
+          &:after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 26px;
+            width: 1px;
+            background: rgba(233, 242, 245, 1);
+          }
+        }
+      }
+    }
+  }
+  &__heading{
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+  &__desc{
+    background: @grey;
+    border-radius: 16px;
+    padding: 48px 26px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+    @media (max-width: @screen-md){
+      padding: 42px 22px;
+    }
+    &--quote{
+      position: absolute;
+      &-left{
+        left: 28px;
+        top: 18px;
+      }
+      &-right{
+        right: 28px;
+        bottom: 18px;
+      }
+    }
+  }
+  &__center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &--single{
+    margin-top: 73px;
+    flex-direction: column;
+  }
+}

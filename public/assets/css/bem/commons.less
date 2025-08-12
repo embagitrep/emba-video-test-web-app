@@ -1,0 +1,68 @@
+@import "commons/body";
+@import "commons/sprite";
+@import "commons/icons";
+@import "commons/heading";
+@import "commons/text";
+@import "commons/img";
+@import "commons/form";
+@import "commons/header";
+@import "commons/img";
+@import "commons/spinner";
+@import "commons/hidden";
+@import "commons/header-mobile";
+@import "commons/user-text";
+@import "commons/section";
+@import "commons/video";
+@import "commons/margin";
+
+.no-chevron{
+  &:before,&:after{
+    content: none!important;
+  }
+}
+.no-overflow{
+  overflow: hidden;
+}
+.bg--transparent{
+  background-color: transparent;
+}
+.no-ma{
+  margin: 0;
+}
+.no-border{
+  border: 0;
+}
+.no--bg{
+  &-m{
+    @media(max-width: @screen-md){
+      background-color: transparent;
+    }
+  }
+}
+
+.radius--30{
+  border-radius: 30px!important;
+}
+
+#straight-line {
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  animation-delay: 1s;
+}
+#dashed-line{
+  stroke-dashoffset: 100;
+  stroke-dasharray: 7 14;
+}
+
+.animated-svg #dashed-line{
+  animation: draw 2s linear forwards;
+}
+.animated-svg #straight-line{
+  animation: draw 3s ease-in-out forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

@@ -1,0 +1,12 @@
+.hidden{
+  &--mobile{
+    @media (max-width: @screen-sm) {
+      display: none!important;
+    }
+  }
+  &--desktop{
+    @media (min-width: @screen-md-min) {
+      display: none!important;
+    }
+  }
+}

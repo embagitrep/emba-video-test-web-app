@@ -1,0 +1,115 @@
+@import "utilities/mixins";
+@import "ion-rangeslider/less/irs";
+@import "vendors/bootstrap/variables.less";
+@import "vendors/bootstrap/less/dropdowns";
+@import "vendors/animate/animate.css";
+@import "vendors/alert/alert.css";
+@import "vendors/toastr.css";
+@import "air-datepicker/air-datepicker.css";
+@import "select2/dist/css/select2.min.css";
+
+@import "vendors/micromodal/micromodal";
+@import "vendors/datepciker";
+@import "vendors/fullcalendar";
+@import "vendors/jquery-ui";
+@import "vendors/slick/slick";
+@import "vendors/rescalendar";
+@import "utilities/bootstrap";
+@import "utilities/fonts";
+
+@import "bem/utilities/sprite";
+@import "bem/variables";
+@import "bem/commons";
+
+/* =============================================== */
+/* === MOBIL CIHAZLAR ÜÇÜN BÜTÜN DÜZƏLİŞLƏR === */
+/* =============================================== */
+
+@media (max-width: 992px) {
+
+  /* 1. Ana blokların hündürlüyünü avtomatik edir ki, məzmun kəsilməsin */
+  .section__separated--item {
+    height: auto !important;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  /* 2. Konteynerlərin enini mobil ekrana tam uyğunlaşdırır */
+  .section__separated--item-h,
+  .video__section {
+    width: 100% !important;
+    max-width: 100% !important; /* Kənara çıxmanın qarşısını alır */
+  }
+
+  /* 3. Düymələri alt-alta və tam enli edir (ən yaxşı mobil görünüş üçün) */
+  .form__btn--group-sm {
+    display: flex;
+    flex-direction: column; /* Düymələri alt-alta düzür */
+    align-items: center;
+    gap: 15px; /* Düymələr arasına şaquli məsafə qoyur */
+    width: 100%;
+  }
+
+  .form__btn--sm--2 {
+    width: 100% !important; /* Hər düymə tam eni tutur */
+  }
+
+  /* 4. Köhnə margin qaydasını ləğv edir (ehtiyat üçün) */
+  .form__btn--group-sm button:last-child {
+    margin-left: 0;
+  }
+
+  /* 5. Video pəncərəsinin hündürlüyünü bir az artırır (istəyə bağlı) */
+  .video__h {
+    height: 300px;
+  }
+}
+
+
+
+/* =================================================== */
+/* === Video Preview və Play Düyməsini Mərkəzləmə === */
+/* =================================================== */
+
+.video__preview {
+  /* Bu qaydalar videonun konteynerini flexbox-a çevirir
+     və içindəki hər şeyi (video və play düyməsi) mərkəzə çəkir. */
+  display: flex !important; /* display:flex olmasını təmin edir */
+  align-items: center;       /* Şaquli (vertical) mərkəzləmə */
+  justify-content: center;   /* Üfüqi (horizontal) mərkəzləmə */
+  
+  /* Mövcud digər stillər (width, height) olduğu kimi qalır */
+  width: 100%;
+  height: 100%;
+  position: relative; /* Gələcəkdə üzərinə başqa element qoymaq üçün */
+}
+
+/* Videonun özünün konteynerə tam sığmasını təmin edir */
+.video__preview .preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover; /* Videonun qara çərçivəni tam doldurmasını təmin edir */
+}
+
+/* =================================================== */
+/* === Düymə İçindəki Mətni Mərkəzləmə === */
+/* =================================================== */
+
+/* "Yenidən çək" kimi ikonlu düymələrin içindəki məzmunu mərkəzə çəkir */
+.form__btn.form__btn--has-icon {
+  justify-content: center;
+}
+
+
+/* =================================================== */
+/* === Video Çəkilişi Zamanı Zoom Probleminin Həlli === */
+/* =================================================== */
+
+/* Bu qayda həm canlı çəkiliş (#video), həm də önizləmə videosunun (.preview)
+   çərçivəyə tam sığmasını və kəsilməməsini təmin edir. */
+#video,
+.video__preview .preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Bu, "zoom out" effektini yaradır və kəsilmənin qarşısını alır */
+}

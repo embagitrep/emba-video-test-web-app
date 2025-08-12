@@ -1,0 +1,32 @@
+.heading{
+    color: @mainColor;
+  &--1{
+    .fonts-native(64px,700);
+    @media (max-width: @screen-md) {
+      .fonts-native(32px,600);
+    }
+  }
+  &--2{
+    .fonts-native(36px,800);
+    @media (max-width: @screen-md) {
+      .fonts-native(30px,800);
+    }
+  }
+  &--3{
+    .fonts-native(24px,600);
+    &-m{
+      @media (max-width: @screen-md) {
+        .fonts-native(24px,600);
+      }
+    }
+  }
+  &--4{
+    .fonts-native(14px,400,@pfont,24px);
+  }
+  &--border{
+    &-bottom{
+      padding-bottom: 42px;
+      border-bottom: 1px solid rgba(207, 207, 207, 0.8);
+    }
+  }
+}

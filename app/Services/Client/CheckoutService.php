@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Services\Client;
+
+use App\Models\CheckoutSession;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
+
+class CheckoutService
+{
+    public function getSessionData(string $sessionId): ?CheckoutSession
+    {
+        return CheckoutSession::where('session_id_enc', $sessionId)
+            ->where('expires_at', '>', now())
+            ->first();
+    }
+
+    public function expireSession(CheckoutSession $session): void
+    {
+        $session->expires_at = now();
+        $session->save();
+    }
+
+    public function getRedirectUrl(string $sessionId): string
+    {
+        $ttl = 60;
+        $prefix = $this->getPrefix();
+        $rand = bin2hex(random_bytes(20));
+        $encryptedId = $prefix.'_'.$rand.'_'.$sessionId;
+
+        CheckoutSession::create([
+            'session_id' => $sessionId,
+            'session_id_enc' => $encryptedId,
+            'expires_at' => now()->addMinutes($ttl),
+        ]);
+        $originalUrl = route('client.index', ['sessionId' => $encryptedId]);
+         $urlWithPort = str_replace(
+        'https://vrecord.embafinans.az',
+        'https://vrecord.embafinans.az:9999',
+        $originalUrl
+    );
+        return $urlWithPort;
+    }
+
+    protected function getPrefix(): string
+    {
+        return App::environment('production') ? 'cs_custom' : 'cs_test';
+    }
+
+    public function getSessionId(): string
+    {
+        return Str::ulid();
+    }
+}

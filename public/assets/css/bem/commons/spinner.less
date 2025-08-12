@@ -1,0 +1,29 @@
+.loading {
+  &__inner{
+    margin-top: 128px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  &-center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 23333;
+  }
+  &-wrap {
+    width: 5em;
+    height: 5em;
+    padding: 8px;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    background-image: url('../../../images/content/spinner-blue.svg');
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
