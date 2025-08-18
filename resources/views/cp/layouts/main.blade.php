@@ -191,10 +191,9 @@
                             {{--<div class="dropdown-divider mb-0"></div>--}}
                             <a class="dropdown-item" href="javascript:void(0)" onclick="submitLogout()"><i
                                         class="bx bx-power-off mr-50"></i> Logout</a>
-                            {{--                            <form action="{{ route('logout') }}" style="display: none" method="post" id="logoutForm">--}}
-                            {{--                                {{ csrf_field() }}--}}
-                            {{--                                <button type="submit"></button>--}}
-                            {{--                            </form>--}}
+                            <form action="{{ route('logout') }}" method="POST" id="logoutForm" style="display:none;">
+                                @csrf
+                            </form>
                         </div>
                     </li>
                 </ul>

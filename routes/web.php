@@ -10,6 +10,7 @@ Auth::routes();
 
 Route::get('/login/mfe', [LoginController::class, 'showAdminLoginForm'])->name('admin.login.get');
 Route::post('/login/mfe', [LoginController::class, 'adminLogin'])->name('admin.login.post');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::any('login', function () {
     return redirect()->route('client.auth.login');
@@ -19,13 +20,24 @@ Route::any('register', function () {
 });
 
 
-// ================================= ADMIN ===============================================================
+// ================================= ADMIN/CLIENT (domain vs local) ========================================
+if (app()->environment('local')) {
+    // On local, expose CP under /cp to avoid conflicts with site routes
+    Route::group(['namespace' => 'CP', 'middleware' => ['web', 'auth.admin'], 'prefix' => 'cp'], function () {
+        require __DIR__.'/cp/cp.php';
+    });
 
-Route::group(['namespace' => 'CP', 'middleware' => ['web', 'auth.admin'], 'domain' => 'vrec.embafinans.az'], function () {
-    require __DIR__.'/cp/cp.php';
-});
-// ================================= END ADMIN ==============================================================
+    // Client routes on local without domain constraint
+    Route::group(['as' => 'client.', 'middleware' => ['web']], function () {
+        require __DIR__.'/site/site.php';
+    });
+} else {
+    // Production domains
+    Route::group(['namespace' => 'CP', 'middleware' => ['web', 'auth.admin'], 'domain' => 'vrec.embafinans.az'], function () {
+        require __DIR__.'/cp/cp.php';
+    });
 
-Route::group(['as' => 'client.',  'middleware' => ['web'], 'domain' => 'vrecord.embafinans.az'], function () {
-    require __DIR__.'/site/site.php';
-});
+    Route::group(['as' => 'client.', 'middleware' => ['web'], 'domain' => 'vrecord.embafinans.az'], function () {
+        require __DIR__.'/site/site.php';
+    });
+}

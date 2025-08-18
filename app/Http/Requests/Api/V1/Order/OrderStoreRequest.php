@@ -19,6 +19,9 @@ class OrderStoreRequest extends FormRequest
         return [
             'app_id' => 'required|max:255',
             'phone' => 'required|string|min:9|max:9',
+            'city' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:1000',
+            'salary' => 'nullable|numeric|min:0',
             'amount' => 'required|numeric|min:1|regex:/^\d+(\.\d{1,2})?$/',
             'currency' => 'nullable|string|in:'.implode(',', array_keys(CurrencyEnum::toArray())),
             'lang' => 'nullable|string|in:'.implode(',', array_keys(locales())),

@@ -24,6 +24,11 @@ class OrderController extends Controller
             $output['success'] = 1;
             $output['message'] = $result['message'];
             $output['redirect_url'] = $this->checkoutService->getRedirectUrl($result['sessionId']);
+            // Provide token and an upload API for mobile apps
+            $session = $this->checkoutService->createSession($result['sessionId']);
+            $output['token'] = $session['token'];
+            $output['expires_at'] = $session['expires_at'];
+            $output['upload_url'] = url('/api/upload/video');
 
             SendSmsJob::dispatch([
                 'merchant_id' => $data['merchant_id'],

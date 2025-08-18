@@ -23,22 +23,13 @@ class CheckoutService
 
     public function getRedirectUrl(string $sessionId): string
     {
-        $ttl = 60;
-        $prefix = $this->getPrefix();
-        $rand = bin2hex(random_bytes(20));
-        $encryptedId = $prefix.'_'.$rand.'_'.$sessionId;
-
-        CheckoutSession::create([
-            'session_id' => $sessionId,
-            'session_id_enc' => $encryptedId,
-            'expires_at' => now()->addMinutes($ttl),
-        ]);
-        $originalUrl = route('client.index', ['sessionId' => $encryptedId]);
-         $urlWithPort = str_replace(
-        'https://vrecord.embafinans.az',
-        'https://vrecord.embafinans.az:9999',
-        $originalUrl
-    );
+        $session = $this->createSession($sessionId);
+        $originalUrl = route('client.index', ['sessionId' => $session['token']]);
+        $urlWithPort = str_replace(
+            'https://vrecord.embafinans.az',
+            'https://vrecord.embafinans.az:9999',
+            $originalUrl
+        );
         return $urlWithPort;
     }
 
@@ -50,5 +41,28 @@ class CheckoutService
     public function getSessionId(): string
     {
         return Str::ulid();
+    }
+
+    /**
+     * Create a temporary checkout session token for uploads/redirects.
+     * Returns array: ['token' => string, 'expires_at' => CarbonInterface]
+     */
+    public function createSession(string $sessionId): array
+    {
+        $ttl = 60;
+        $prefix = $this->getPrefix();
+        $rand = bin2hex(random_bytes(20));
+        $encryptedId = $prefix . '_' . $rand . '_' . $sessionId;
+
+        $record = CheckoutSession::create([
+            'session_id' => $sessionId,
+            'session_id_enc' => $encryptedId,
+            'expires_at' => now()->addMinutes($ttl),
+        ]);
+
+        return [
+            'token' => $record->session_id_enc,
+            'expires_at' => $record->expires_at,
+        ];
     }
 }

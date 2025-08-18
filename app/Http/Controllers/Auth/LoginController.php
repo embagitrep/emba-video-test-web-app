@@ -71,4 +71,17 @@ class LoginController extends Controller
 
         return back()->withInput($request->only('email', 'remember'));
     }
+
+    /**
+     * Log the user out of the application and redirect to admin login.
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('admin.login.get');
+    }
 }
