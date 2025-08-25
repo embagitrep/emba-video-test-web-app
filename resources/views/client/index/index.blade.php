@@ -92,7 +92,7 @@
 
                 <div class="user-text user-text--list hidden--mobile">
                     <div class="user-text--list-item">{{ getTranslation('Təqdim olunan mətn tam və səlist şəkildə oxunmalıdır.') }}</div>
-                    <div class="user-text--list-item">{{ getTranslation('Video çəkilişin müddəti ən azı 10 (on) saniyə olmalıdır.') }}</div>
+                    <div class="user-text--list-item">{{ getTranslation('Video çəkilişin müddəti ən azı 15 (on) saniyə olmalıdır.') }}</div>
                     <div class="user-text--list-item">{{ getTranslation('Videoda kənar şəxslər olmamalıdır.') }}</div>
                     <div class="user-text--list-item">
                         {{ getTranslation('Üz görünüşünə təsir edən xarici amillər, zəif işıqlandırma və aşağı keyfiyyətli görüntü olmamalıdır.') }}
@@ -108,7 +108,7 @@
                 <div class="video__h">
                     <div class="video__frame js--videoFrame">
                         <video id="video" autoplay muted></video>
-                        <div id="countdown" class="video__countdown">20</div>
+                        <div id="countdown" class="video__countdown"></div>
                     </div>
                     <div class="video__attention js--videoAttention">
                         {{ getTranslation('Need to allow camera to start record') }}

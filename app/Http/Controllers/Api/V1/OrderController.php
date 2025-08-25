@@ -30,13 +30,13 @@ class OrderController extends Controller
             $output['expires_at'] = $session['expires_at'];
             $output['upload_url'] = url('/api/upload/video');
 
-            SendSmsJob::dispatch([
-                'merchant_id' => $data['merchant_id'],
-                'session_id' => $result['sessionId'],
-                'phone' => $data['phone'],
-                'message' => getTranslation('Please visit the {url} for video recording', ['url' => $output['redirect_url']],$data['lang']??'az'),
-                'url' => $output['redirect_url'],
-            ]);
+            // SendSmsJob::dispatch([
+            //     'merchant_id' => $data['merchant_id'],
+            //     'session_id' => $result['sessionId'],
+            //     'phone' => $data['phone'],
+            //     'message' => getTranslation('Please visit the {url} for video recording', ['url' => $output['redirect_url']],$data['lang']??'az'),
+            //     'url' => $output['redirect_url'],
+            // ]);
         }else{
             $statusCode = 400;
             $output['success'] = 0;
