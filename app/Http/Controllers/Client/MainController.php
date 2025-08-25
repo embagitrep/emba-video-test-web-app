@@ -62,14 +62,20 @@ class MainController extends Controller
 
         $type = 'video';
 
+        // Validate uploaded file presence and type
         $video = $request->file('video');
-
         $request->validate([
             'video' => 'required|file|mimes:webm,mp4,ogg|max:51200',
         ]);
+        if (! $video || ! $video->isValid() || ($video->getSize() ?? 0) <= 0) {
+            return response()->json([
+                'success' => 0,
+                'message' => 'Uploaded file is empty or invalid',
+            ], 400);
+        }
 
 
-        $file = $request->file('video');
+        $file = $video;
         $path = 'applications/' . $model->id;
 
         $existing = Gallery::where('model_id', $model->id)
@@ -83,7 +89,11 @@ class MainController extends Controller
         }
 
 
-        $storedPath = $file->store($path);
+        // Avoid fopen("") issues: use Storage::put with explicit name
+        $extension = $file->getClientOriginalExtension() ?: ($file->extension() ?: 'webm');
+        $filename = bin2hex(random_bytes(12)) . '.' . $extension;
+        $storedPath = $path . '/' . $filename;
+        \Storage::put($storedPath, $file->get());
 
 
         Gallery::create([
