@@ -1,0 +1,41 @@
+name: Deploy to Server (/video_test)
+
+on:
+  push:
+    branches: [ "main" ]   # səndə hansı branch deploy olunacaqsa onu yaz
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # (Opsional) Frontend-i GitHub runner-də build edib yalnız hasil faylları göndərmək istəyirsənsə:
+      # - name: Set up Node
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      # - run: npm ci && npm run build
+
+      - name: Add SSH known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Rsync code to server
+        run: |
+          EXCLUDES="--exclude .git/ --exclude .github/ --exclude .env --exclude storage/ --exclude node_modules/"
+          # Əgər vendor-u göndərmək istəmirsənsə (serverdə composer install edəcəyik), onu da çıxar:
+          EXCLUDES="$EXCLUDES --exclude vendor/"
+          rsync -az --delete $EXCLUDES -e "ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }}" ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/video_test/
+
+      - name: Run post-deploy script on server
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo /usr/local/bin/deploy_video_test.sh"
