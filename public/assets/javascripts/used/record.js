@@ -11,6 +11,7 @@ let stream = null;
 let mediaRecorder = null;
 let recordedBlobs = [];
 let countdownTimer = null;
+let sendBtnTimer = null;
 
 async function requestCameraAccess() {
     try {
@@ -57,8 +58,15 @@ function startRecording() {
     mediaRecorder.start();
 
     // 20-second countdown
-    let timeLeft = 10;
+    let timeLeft = 15;
     countdown.innerText = timeLeft;
+    // Hide and disable send button at start
+    $(document).find('.js--sendVideo').css('display','none').attr('disabled', true);
+    // Show send button after 10 seconds of recording
+    if (sendBtnTimer) { clearTimeout(sendBtnTimer); }
+    sendBtnTimer = setTimeout(() => {
+        $(document).find('.js--sendVideo').css('display','').attr('disabled', false);
+    }, 10000);
     countdownTimer = setInterval(() => {
         timeLeft--;
         countdown.innerText = timeLeft;
