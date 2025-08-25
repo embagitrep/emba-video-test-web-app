@@ -47,7 +47,14 @@ class OrderController extends Controller
 
     public function videosPublic($appId)
     {
-        $order = Order::with('gallery')->where('app_id', $appId)->orderByDesc('created_at')->first();
+        // Prefer the most recent order that actually has a video in gallery
+        $order = Order::with('gallery')
+            ->where('app_id', $appId)
+            ->whereHas('gallery', function($q){
+                $q->where('file_type', 'video');
+            })
+            ->orderByDesc('created_at')
+            ->first();
         $output = [];
         if (!$order) {
             abort(404);
