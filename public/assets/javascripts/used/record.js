@@ -12,6 +12,7 @@ let mediaRecorder = null;
 let recordedBlobs = [];
 let countdownTimer = null;
 let sendBtnTimer = null;
+let pendingSend = false;
 
 async function requestCameraAccess() {
     try {
@@ -53,6 +54,12 @@ function startRecording() {
         $(document).find('.js--restartRec').css('display','');
         $(document).find('.js--sendVideo').css('display','');
         stopStreamTracks();
+
+        // If user clicked send while recording, submit after stop
+        if (pendingSend) {
+            pendingSend = false;
+            doSend();
+        }
     };
 
     mediaRecorder.start();
@@ -123,10 +130,17 @@ $('.js--restartRec').click(async function (e) {
     }
 });
 
-$(document).on('click', '.js--sendVideo', function (e) {
-    e.preventDefault();
+function doSend(){
+    // Ensure we have data
+    if (!recordedBlobs || recordedBlobs.length === 0) {
+        return;
+    }
 
     const blob = new Blob(recordedBlobs, { type: 'video/webm' });
+    if (blob.size === 0){
+        return;
+    }
+
     const formData = new FormData();
     formData.append('video', blob, 'recorded.webm');
 
@@ -161,4 +175,18 @@ $(document).on('click', '.js--sendVideo', function (e) {
             },1000)
         }
     });
+}
+
+$(document).on('click', '.js--sendVideo', function (e) {
+    e.preventDefault();
+
+    // If still recording, stop first and send after onstop
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        pendingSend = true;
+        if (countdownTimer) { clearInterval(countdownTimer); }
+        try { mediaRecorder.stop(); } catch (err) {}
+        return;
+    }
+
+    doSend();
 });

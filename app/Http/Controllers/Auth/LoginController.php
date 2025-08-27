@@ -47,7 +47,7 @@ class LoginController extends Controller
         if (in_array('cp', $prev)) {
             return redirect()->route('admin.login.get');
         }
-        dd('not logged');
+
 
         return redirect()->route('client.index', ['lang' => locale()]);
     }
