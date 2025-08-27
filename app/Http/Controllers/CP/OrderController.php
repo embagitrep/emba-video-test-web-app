@@ -82,4 +82,31 @@ class OrderController extends Controller
             'Content-Type' => 'video/mp4'
         ]);
     }
+
+    public function headStreamVideoByAppId(Request $request, $appId)
+    {
+        $order = Order::with('gallery')
+            ->where('app_id', $appId)
+            ->whereHas('gallery', function($q){
+                $q->where('file_type', 'video');
+            })
+            ->orderByDesc('created_at')
+            ->first();
+
+        if (!$order) {
+            abort(404);
+        }
+
+        $video = $order->gallery()->orderBy('created_at', 'desc')->first();
+        if (!$video || !Storage::exists($video->file_name)) {
+            abort(404);
+        }
+
+        $size = Storage::size($video->file_name);
+
+        return response(null, 200, [
+            'Content-Type' => 'video/mp4',
+            'Content-Length' => $size,
+        ]);
+    }
 }

@@ -72,6 +72,7 @@ Route::group(['prefix' => 'orders'], function () {
     Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
     Route::get('videos/{merchant}/{appId}',[OrderController::class, 'videos'])->name('admin.orders.videos');
     Route::get('stream-video/{order}',[OrderController::class, 'streamVideo'])->name('admin.orders.video.stream')->withoutMiddleware('auth.admin');
+    Route::match(['HEAD'], 'stream-video/{appId}', [OrderController::class, 'headStreamVideoByAppId'])->name('admin.orders.video.stream.head')->withoutMiddleware('auth.admin');
 });
 
 Route::group(['prefix' => 'merchants'], function () {
