@@ -65,8 +65,14 @@ class OrderController extends Controller
         return view('cp.order.videos-public', $output);
     }
 
-    public function streamVideo(Request $request, Order $order)
+    public function streamVideo(Request $request, $appId)
     {
+        $order = Order::with('gallery')->where('app_id', $appId)->orderByDesc('created_at')->first();
+
+        if (! $order) {
+            abort(404);
+        }
+
         $video = $order->gallery()->orderBy('created_at', 'desc')->first();
 
 

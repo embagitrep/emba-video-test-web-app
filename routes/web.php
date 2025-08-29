@@ -31,6 +31,9 @@ if (app()->environment('local')) {
     Route::group(['as' => 'client.', 'middleware' => ['web']], function () {
         require __DIR__.'/site/site.php';
     });
+
+    // Public GET route without /cp prefix for local testing (by appId)
+    Route::get('orders/stream-video/{appId}', [\App\Http\Controllers\CP\OrderController::class, 'streamVideo'])->name('orders.video.stream');
 } else {
     // Production domains
     Route::group(['namespace' => 'CP', 'middleware' => ['web', 'auth.admin'], 'domain' => 'vrec.embafinans.az'], function () {

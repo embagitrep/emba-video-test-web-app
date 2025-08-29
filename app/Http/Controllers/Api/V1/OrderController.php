@@ -8,6 +8,7 @@ use App\Jobs\SendSmsJob;
 use App\Services\Api\OrderService;
 use App\Services\Client\CheckoutService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -30,14 +31,41 @@ class OrderController extends Controller
             $output['expires_at'] = $session['expires_at'];
             $output['upload_url'] = url('/api/upload/video');
 
+            // Log decision inputs for SMS dispatch
+            $wallet = $request->boolean('wallet');
+            Log::info('API Order store: evaluating SMS dispatch', [
+                'wallet' => $wallet,
+                'merchant_id' => $data['merchant_id'],
+                'session_id' => $result['sessionId'],
+                'phone' => $data['phone'] ?? null,
+                'redirect_url' => $output['redirect_url'] ?? null,
+            ]);
+
             // Conditionally send SMS only when wallet flag is not true
-            if (! $request->boolean('wallet')) {
-                SendSmsJob::dispatch([
-                    'merchant_id' => $data['merchant_id'],
-                    'session_id' => $result['sessionId'],
-                    'phone' => $data['phone'],
-                    'message' => getTranslation('Please visit the {url} for video recording', ['url' => $output['redirect_url']], $data['lang']??'az'),
-                    'url' => $output['redirect_url'],
+            if (! $wallet) {
+                try {
+                    SendSmsJob::dispatch([
+                        'merchant_id' => $data['merchant_id'],
+                        'session_id' => $result['sessionId'],
+                        'phone' => $data['phone'],
+                        'message' => getTranslation('Please visit the {url} for video recording', ['url' => $output['redirect_url']], $data['lang']??'az'),
+                        'url' => $output['redirect_url'],
+                    ]);
+                    Log::info('API Order store: SendSmsJob dispatched', [
+                        'merchant_id' => $data['merchant_id'],
+                        'session_id' => $result['sessionId'],
+                        'phone' => $data['phone'],
+                    ]);
+                } catch (\Throwable $e) {
+                    Log::error('API Order store: SendSmsJob dispatch failed', [
+                        'error' => $e->getMessage(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                    ]);
+                }
+            } else {
+                Log::info('API Order store: SMS skipped due to wallet flag', [
+                    'wallet' => $wallet,
                 ]);
             }
         }else{

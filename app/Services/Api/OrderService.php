@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\Client\CheckoutService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
@@ -17,7 +18,18 @@ class OrderService
             DB::transaction(function () use ($data, $sessionId) {
                 $data['status'] = 'pending';
                 $data['session_id'] = $sessionId;
-                Order::create($data);
+                      // Upsert by merchant_id + app_id to reuse the same record
+                      $order = Order::where('merchant_id', $data['merchant_id'])
+                      ->where('app_id', $data['app_id'])
+                      ->first();
+  
+                  if ($order) {
+                      $order->fill($data);
+                      $order->save();
+                  } else {
+                      Order::create($data);
+                  }
+               
             });
 
             return [
@@ -27,6 +39,11 @@ class OrderService
                 'lang' => $data['lang']??'az'
             ];
         }catch (\Exception $e) {
+            Log::error('OrderService.store failed', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
             return [
                 'success' => 0,
                 'message' => $e->getMessage()
