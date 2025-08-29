@@ -43,4 +43,5 @@ if (app()->environment('local')) {
     Route::group(['as' => 'client.', 'middleware' => ['web'], 'domain' => 'vrecord.embafinans.az'], function () {
         require __DIR__.'/site/site.php';
     });
+    
 }
