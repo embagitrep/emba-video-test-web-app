@@ -36,12 +36,12 @@ if (app()->environment('local')) {
     Route::get('orders/stream-video/{appId}', [\App\Http\Controllers\CP\OrderController::class, 'streamVideo'])->name('orders.video.stream');
 } else {
     // Production domains
-    Route::group(['namespace' => 'CP', 'middleware' => ['web', 'auth.admin'], 'domain' => 'vrec.embafinans.az'], function () {
+    Route::group(['namespace' => 'CP', 'middleware' => ['web', 'auth.admin'], 'domain' => 'vrectest.embafinans.az:7443'], function () {
         require __DIR__.'/cp/cp.php';
     });
 
     Route::group(['as' => 'client.', 'middleware' => ['web'], 'domain' => 'vrecord.embafinans.az'], function () {
         require __DIR__.'/site/site.php';
     });
-    
+
 }

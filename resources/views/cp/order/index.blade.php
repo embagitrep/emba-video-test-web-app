@@ -73,6 +73,13 @@
                                         'format' => 'html',
                                     ],
                                     [
+                                        'label' => 'Created',
+                                        'filter' => false,
+                                        'value' => function ($row) {
+                                           return $row->created_at ? $row->created_at->format('d-m-Y/ H:i') : '';
+                                         },
+                                    ],
+                                    [
                                         'label' => 'Watch',
                                         'filter' => false,
                                         'format' => 'html',
@@ -91,3 +98,4 @@
     </div>
 
 @endsection
+

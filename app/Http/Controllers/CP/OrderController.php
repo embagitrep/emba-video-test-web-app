@@ -15,6 +15,7 @@ class OrderController extends Controller
     {
         $query = Order::query();
         $query->with('merchant');
+        $query->orderByDesc('id');
 
         $output = [];
         $output['merchants'] = selectOptionArrGeneratorByKey(Merchant::select('id', 'name')->orderBy('name')->pluck('name', 'id')->toArray());
@@ -116,3 +117,4 @@ class OrderController extends Controller
         ]);
     }
 }
+

@@ -3,8 +3,8 @@
 @section('content')
 
     <script>
-        var fileUploadPath = "{{ route('client.upload.video',['sessionId' => $sessionId]) }}"
-    </script>
+   var fileUploadPath = "{{ request()->getSchemeAndHttpHost() }}:7443/upload-video/{{ $sessionId }}"
+   </script>
 
     <?php
     $isEF = false;

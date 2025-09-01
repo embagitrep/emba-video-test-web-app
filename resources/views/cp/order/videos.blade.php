@@ -48,9 +48,9 @@
                 </div>
                 <div class="col-4">
                     <div class="overflow-x-scroll" style="height: 500px;">
-                        @foreach($orders as $order)
-                            <div class="card" onclick="playVideo('{{ route('admin.orders.video.stream', ['order' => $order->id]) }}')">
-                                <video src="{{ route('admin.orders.video.stream',['order' => $order->id]) }}" ></video>
+                                 @foreach($orders as $order)
+                            <div class="card" onclick="playVideo('{{ route('admin.orders.video.stream', ['appId' => $order->app_id]) }}')">
+                                <video src="{{ route('admin.orders.video.stream',['appId' => $order->app_id]) }}" ></video>
                                 <div class="card-body">
                                     <a href="javascript:void(0)" class="btn btn-outline-primary">Click to watch</a>
                                 </div>

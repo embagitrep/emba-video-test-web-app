@@ -26,8 +26,8 @@ class CheckoutService
         $session = $this->createSession($sessionId);
         $originalUrl = route('client.index', ['sessionId' => $session['token']]);
         $urlWithPort = str_replace(
-            'https://vrecord.embafinans.az',
-            'https://vrecord.embafinans.az:9999',
+            'https://vrectest.embafinans.az',
+            'https://vrectest.embafinans.az:7443',
             $originalUrl
         );
         return $urlWithPort;

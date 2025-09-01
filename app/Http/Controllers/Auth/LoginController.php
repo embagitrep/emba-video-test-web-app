@@ -61,11 +61,14 @@ class LoginController extends Controller
     {
 
         $this->validate($request, [
-            'email' => 'required|email',
+            'email' => 'required|string',
             'password' => 'required|min:6',
         ]);
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        $loginValue = $request->input('email');
+        $loginField = filter_var($loginValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if (Auth::attempt([$loginField => $loginValue, 'password' => $request->password], $request->boolean('remember'))) {
             return redirect()->route('admin.index');
         }
 
