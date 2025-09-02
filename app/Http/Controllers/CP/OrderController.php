@@ -39,6 +39,18 @@ class OrderController extends Controller
             $query->where('merchant_id', $output['selectedMerchant']);
         }
 
+        // Apply app_id filter with exact match for full IDs, partial match otherwise
+        if (!empty($filters['app_id'])) {
+            $appIdFilter = $filters['app_id'];
+
+            // Heuristic: treat long, hyphenated tokens as a full ID → exact match
+            if (preg_match('/^[A-Za-z0-9\-]{20,}$/', $appIdFilter) === 1) {
+                $query->where('app_id', $appIdFilter);
+            } else {
+                $query->where('app_id', 'like', "%{$appIdFilter}%");
+            }
+        }
+
         $dataProvider = new EloquentDataProvider($query);
         $output['dataProvider'] = $dataProvider;
 
