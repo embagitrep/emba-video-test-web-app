@@ -7,6 +7,7 @@ use App\Models\Merchant;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Itstructure\GridView\DataProviders\EloquentDataProvider;
 
 class OrderController extends Controller
@@ -47,15 +48,20 @@ class OrderController extends Controller
         if (!empty($filters['app_id'])) {
             $appIdFilter = $filters['app_id'];
 
-            // Heuristic: treat long, hyphenated tokens as a full ID → prefer exact, but also allow LIKE to be resilient to stored whitespace
+            // Case-insensitive matching: LOWER(column) compared to lowered input
+            $lowered = strtolower($appIdFilter);
             if (preg_match('/^[A-Za-z0-9\-]{20,}$/', $appIdFilter) === 1) {
-                $query->where(function($q) use ($appIdFilter) {
-                    $q->where('app_id', $appIdFilter)
-                      ->orWhere('app_id', 'like', "%{$appIdFilter}%");
+                $query->where(function($q) use ($lowered) {
+                    $q->whereRaw('LOWER(app_id) = ?', [$lowered])
+                      ->orWhereRaw('LOWER(app_id) LIKE ?', ['%'.$lowered.'%']);
                 });
             } else {
-                $query->where('app_id', 'like', "%{$appIdFilter}%");
+                $query->whereRaw('LOWER(app_id) LIKE ?', ['%'.$lowered.'%']);
             }
+
+            // Prevent default provider from adding a second (possibly case-sensitive) filter
+            unset($filters['app_id']);
+            $request->merge(['filters' => $filters]);
         }
 
         $dataProvider = new EloquentDataProvider($query);
