@@ -23,6 +23,16 @@ class OrderController extends Controller
 
         $filters = $request->get('filters');
 
+        // Sanitize incoming filters to avoid trailing/leading whitespace issues (e.g., %09 tabs)
+        if (is_array($filters)) {
+            $sanitizedFilters = [];
+            foreach ($filters as $filterKey => $filterValue) {
+                $sanitizedFilters[$filterKey] = is_string($filterValue) ? trim($filterValue) : $filterValue;
+            }
+            $request->merge(['filters' => $sanitizedFilters]);
+            $filters = $sanitizedFilters;
+        }
+
         if (!empty($filters['merchant_id'])) {
             $output['selectedMerchant'] = $filters['merchant_id'];
 
