@@ -49,7 +49,7 @@
                                         'label' => 'Merchants',
                                         'filter' => [
                                             'class' => Itstructure\GridView\Filters\DropdownFilter::class,
-                                            'name' => 'merchant.',
+                                            'name' => 'merchant_id',
                                             'value' => $selectedMerchant,
                                             'data' => $merchants,
                                             ],

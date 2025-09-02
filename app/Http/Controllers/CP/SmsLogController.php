@@ -21,8 +21,8 @@ class SmsLogController extends Controller
 
         $filters = $request->get('filters');
 
-        if (!empty($filters['merchant.'])) {
-            $output['selectedMerchant'] = $filters['merchant.'];
+        if (!empty($filters['merchant_id'])) {
+            $output['selectedMerchant'] = $filters['merchant_id'];
 
             $query->where('merchant_id', $output['selectedMerchant']);
         }
