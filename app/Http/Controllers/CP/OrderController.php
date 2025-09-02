@@ -23,11 +23,15 @@ class OrderController extends Controller
 
         $filters = $request->get('filters');
 
-        // Sanitize incoming filters to avoid trailing/leading whitespace issues (e.g., %09 tabs)
+        // Sanitize incoming filters to avoid trailing/leading whitespace or control chars (tabs/newlines)
         if (is_array($filters)) {
             $sanitizedFilters = [];
             foreach ($filters as $filterKey => $filterValue) {
-                $sanitizedFilters[$filterKey] = is_string($filterValue) ? trim($filterValue) : $filterValue;
+                if (is_string($filterValue)) {
+                    $filterValue = str_replace(["\t", "\n", "\r"], '', $filterValue);
+                    $filterValue = trim($filterValue);
+                }
+                $sanitizedFilters[$filterKey] = $filterValue;
             }
             $request->merge(['filters' => $sanitizedFilters]);
             $filters = $sanitizedFilters;
@@ -43,9 +47,12 @@ class OrderController extends Controller
         if (!empty($filters['app_id'])) {
             $appIdFilter = $filters['app_id'];
 
-            // Heuristic: treat long, hyphenated tokens as a full ID → exact match
+            // Heuristic: treat long, hyphenated tokens as a full ID → prefer exact, but also allow LIKE to be resilient to stored whitespace
             if (preg_match('/^[A-Za-z0-9\-]{20,}$/', $appIdFilter) === 1) {
-                $query->where('app_id', $appIdFilter);
+                $query->where(function($q) use ($appIdFilter) {
+                    $q->where('app_id', $appIdFilter)
+                      ->orWhere('app_id', 'like', "%{$appIdFilter}%");
+                });
             } else {
                 $query->where('app_id', 'like', "%{$appIdFilter}%");
             }
