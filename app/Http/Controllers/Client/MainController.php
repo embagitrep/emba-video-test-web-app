@@ -95,6 +95,7 @@ class MainController extends Controller
 
         if (!Storage::exists($path)) {
             Storage::makeDirectory($path, 0755, true);
+            @chmod(storage_path('app/'.$path), 0755);
         }
 
 
