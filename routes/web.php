@@ -34,7 +34,7 @@ if (app()->environment('local')) {
 
     // Public GET route without /cp prefix for local testing (by appId)
     Route::get('orders/stream-video/{appId}', [\App\Http\Controllers\CP\OrderController::class, 'streamVideo'])->name('orders.video.stream');
-    Route::get('video/{appId}', [\App\Http\Controllers\CP\OrderController::class, 'streamVideo'])->name('orders.video.stream');
+    Route::get('videos/{appId}', [\App\Http\Controllers\CP\OrderController::class, 'streamVideo'])->name('orders.video.stream');
 } else {
     // Production domains
     Route::group(['namespace' => 'CP', 'middleware' => ['web', 'auth.admin'], 'domain' => 'vrectest.embafinans.az:7443'], function () {
