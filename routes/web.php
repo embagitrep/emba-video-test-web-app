@@ -13,10 +13,10 @@ Route::post('/login/mfe', [LoginController::class, 'adminLogin'])->name('admin.l
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::any('login', function () {
-    return redirect()->route('client.auth.login');
+    return redirect()->route('admin.login.get');
 });
 Route::any('register', function () {
-    return redirect()->route('client.auth.register');
+    return redirect()->route('admin.login.get');
 });
 
 

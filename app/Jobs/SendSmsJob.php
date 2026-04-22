@@ -4,9 +4,11 @@ namespace App\Jobs;
 
 use App\Models\SmsLog;
 use App\Services\Client\SMS\SMSService;
+use App\Services\Client\SMS\PostaGuverciniSMSService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class SendSmsJob implements ShouldQueue, ShouldBeUnique
 {
@@ -45,14 +47,28 @@ class SendSmsJob implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
-        $result = (new SMSService())->send($this->data['phone'], $this->data['message']);
+        $provider = config('sms.PROVIDER', 'lsim');
+        $phone    = $this->data['phone'];
+        $message  = $this->data['message'];
+
+        if ($provider === 'postaGuvercini') {
+            $result = (new PostaGuverciniSMSService())->send($phone, $message);
+        } else {
+            $result = (new SMSService())->send($phone, $message);
+
+            // Fallback to Posta Güvercini if L.Sim fails and PG is configured
+            if (($result['success'] ?? 0) === 0 && config('sms.PG_API_URL')) {
+                Log::warning('L.Sim SMS failed, trying Posta Güvercini fallback', ['phone' => $phone]);
+                $result = (new PostaGuverciniSMSService())->send($phone, $message);
+            }
+        }
 
         SmsLog::create([
             'merchant_id' => $this->data['merchant_id'],
             'session_id'  => $this->data['session_id'],
             'phone'       => $this->data['phone'],
             'message'     => $this->data['message'],
-            'status'      => $result['status'],
+            'status'      => $result['status'] ?? 'failed',
             'url'         => $this->data['url'],
         ]);
     }

@@ -82,17 +82,21 @@
                 <h3 class="heading section__heading heading--2">{{ getTranslation('Video Təlimat') }}</h3>
                 <div class="user-text user-text--main">{{ getTranslation('Zəhmət olmasa, aşağıdakı mətni aydın və səlis şəkildə kameraya baxaraq oxuyub video çəkin:') }}</div>
 
+                <div class="user-text user-text--amount-block">
+                    {{ getTranslation('Kredit məbləği') }}: <strong>{{ number_format($model->amount, 2) }} AZN</strong>
+                </div>
+
                 <div class="section__desc">
                     <span class="icons icons--quote-left section__desc--quote section__desc--quote-left"></span>
                     <span class="icons icons--quote-right section__desc--quote section__desc--quote-right"></span>
-                    <div class="user-text user-text--24 user-text--sm-18 user-text--700">
+                    <div class="user-text user-text--24 user-text--sm-18 user-text--700 user-text--reading">
                         {{ $txtToRead }}
                     </div>
                 </div>
 
                 <div class="user-text user-text--list hidden--mobile">
                     <div class="user-text--list-item">{{ getTranslation('Təqdim olunan mətn tam və səlist şəkildə oxunmalıdır.') }}</div>
-                    <div class="user-text--list-item">{{ getTranslation('Video çəkilişin müddəti ən azı 15 (on) saniyə olmalıdır.') }}</div>
+                    <div class="user-text--list-item">{{ getTranslation('Video çəkilişin müddəti ən azı 10 saniyə olmalıdır.') }}</div>
                     <div class="user-text--list-item">{{ getTranslation('Videoda kənar şəxslər olmamalıdır.') }}</div>
                     <div class="user-text--list-item">
                         {{ getTranslation('Üz görünüşünə təsir edən xarici amillər, zəif işıqlandırma və aşağı keyfiyyətli görüntü olmamalıdır.') }}
@@ -117,6 +121,11 @@
                         <video id="recordedVideo" class="preview" controls></video>
                     </div>
                 </div>
+                <div class="video__warning">
+                    <span class="video__warning--icon">&#9888;</span>
+                    {{ getTranslation('Video çəkiliş zamanı ətrafınızda başqa şəxsin olmadığından əmin olun') }}
+                </div>
+
                 <div class="form__btn--group form__btn--group-sm">
                     <button type="button" class="form__btn form__btn--full form__btn--success form__btn--has-icon form__btn--center form__btn--green form__btn--shadow-green js--startRec">
                         {{ getTranslation('Başla') }}
@@ -136,7 +145,7 @@
 
                 <div class="user-text user-text--list mt--sm-25 hidden--desktop">
                     <div class="user-text--list-item">{{ getTranslation('Təqdim olunan mətn tam və səlist şəkildə oxunmalıdır.') }}</div>
-                    <div class="user-text--list-item">{{ getTranslation('Video çəkilişin müddəti ən azı 10 (on) saniyə olmalıdır.') }}</div>
+                    <div class="user-text--list-item">{{ getTranslation('Video çəkilişin müddəti ən azı 10 saniyə olmalıdır.') }}</div>
                     <div class="user-text--list-item">{{ getTranslation('Videoda kənar şəxslər olmamalıdır.') }}</div>
                     <div class="user-text--list-item">
                         {{ getTranslation('Üz görünüşünə təsir edən xarici amillər, zəif işıqlandırma və aşağı keyfiyyətli görüntü olmamalıdır.') }}

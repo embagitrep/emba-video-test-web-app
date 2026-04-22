@@ -65,7 +65,7 @@ function startRecording() {
     mediaRecorder.start();
 
     // 20-second countdown
-    let timeLeft = 15;
+    let timeLeft = 20;
     countdown.innerText = timeLeft;
     // Hide and disable send button at start
     $(document).find('.js--sendVideo').css('display','none').attr('disabled', true);

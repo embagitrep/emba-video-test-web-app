@@ -6837,3 +6837,44 @@ body {
   /* Bu, "zoom out" effektini yaradır və kəsilmənin qarşısını alır */
 }
 
+/* Kredit məbləği bloku */
+.user-text--amount-block {
+    font-size: 18px;
+    font-weight: 700;
+    color: #043c58;
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    background: #f0f8ff;
+    border-left: 4px solid #41c7f2;
+    border-radius: 4px;
+}
+
+/* Video çəkiliş xəbərdarlığı */
+.video__warning {
+    background: #fff8e1;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #6d4c00;
+    text-align: center;
+    line-height: 1.5;
+}
+.video__warning--icon {
+    margin-right: 6px;
+}
+
+/* Oxunan mətnin şrifti - yaşlı istifadəçilər üçün iri */
+.user-text--reading {
+    font-size: 28px !important;
+    line-height: 40px !important;
+}
+@media (max-width: 992px) {
+    .user-text--reading {
+        font-size: 22px !important;
+        line-height: 32px !important;
+    }
+}
+
