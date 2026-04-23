@@ -39,8 +39,12 @@ class PostaGuverciniSMSService
                     'Text'    => $message,
                     'Purpose' => 'INF',
                     'Options' => [
-                        'Originator' => $this->sender,
-                        'Encoding'   => 'UNICODE',
+                        'Originator'  => $this->sender,
+                        'SendTime'    => null,
+                        'ExpireTime'  => null,
+                        'Encoding'    => 'LATIN',
+                        'SmsType'     => 'SMS',
+                        'ReportLabel' => null,
                     ],
                     'Receivers' => [
                         ['Receiver' => $phone],
