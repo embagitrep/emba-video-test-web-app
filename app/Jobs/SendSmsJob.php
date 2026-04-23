@@ -58,8 +58,9 @@ class SendSmsJob implements ShouldQueue, ShouldBeUnique
 
             // Fallback to Posta Güvercini if L.Sim fails and PG is configured
             if (($result['success'] ?? 0) === 0 && config('sms.PG_API_URL')) {
-                Log::warning('L.Sim SMS failed, trying Posta Güvercini fallback', ['phone' => $phone]);
+                Log::warning('L.Sim SMS failed, trying Posta Güvercini fallback', ['phone' => $phone, 'lsim_result' => $result]);
                 $result = (new PostaGuverciniSMSService())->send($phone, $message);
+                Log::info('Posta Güvercini response', ['phone' => $phone, 'result' => $result]);
             }
         }
 
