@@ -2,6 +2,18 @@
 
 @section('content')
 
+    <!-- Camera Permission Modal -->
+    <div id="cameraPermissionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:12px; padding:40px 32px; max-width:420px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+            <div style="font-size:48px; margin-bottom:16px;">📷</div>
+            <h3 style="margin:0 0 12px; font-size:20px; font-weight:700;">{{ getTranslation('Kameraya icazə verin') }}</h3>
+            <p style="margin:0 0 28px; color:#555; font-size:15px; line-height:1.5;">{{ getTranslation('Video çəkiliş üçün kamera və mikrofona icazə verməniz tələb olunur.') }}</p>
+            <button id="allowCameraBtn" style="background:#28a745; color:#fff; border:none; border-radius:8px; padding:14px 36px; font-size:16px; font-weight:600; cursor:pointer; width:100%;">
+                {{ getTranslation('İcazə ver') }}
+            </button>
+        </div>
+    </div>
+
     <script>
    var fileUploadPath = "{{ request()->getSchemeAndHttpHost() }}:7443/upload-video/{{ $sessionId }}"
    </script>

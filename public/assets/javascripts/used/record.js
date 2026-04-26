@@ -14,15 +14,25 @@ let countdownTimer = null;
 let sendBtnTimer = null;
 let pendingSend = false;
 
+function showCameraModal() {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('cameraPermissionModal');
+        modal.style.display = 'flex';
+        document.getElementById('allowCameraBtn').onclick = () => {
+            modal.style.display = 'none';
+            resolve();
+        };
+    });
+}
+
 async function requestCameraAccess() {
     try {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        $('.js--videoAttention').css('display','none')
-        $('.js--videoFrame').css('display','block')
+        $('.js--videoAttention').css('display','none');
+        $('.js--videoFrame').css('display','block');
         video.srcObject = stream;
         return true;
     } catch (e) {
-        alert('Camera access denied or unavailable. Please allow access and retry.');
         return false;
     }
 }
@@ -88,16 +98,16 @@ function startRecording() {
 
 $('.js--startRec').click(async function (e) {
     e.preventDefault();
-    let _this = $(this)
+    let _this = $(this);
+
+    await showCameraModal();
+
     const accessGranted = await requestCameraAccess();
 
     if (accessGranted) {
-        _this.css('display','none')
-        _this.attr('disabled',true);
-
+        _this.css('display','none');
+        _this.attr('disabled', true);
         startRecording();
-    } else {
-        // startBtn.disabled = false;
     }
 })
 
