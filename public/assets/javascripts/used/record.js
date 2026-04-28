@@ -27,7 +27,14 @@ function showCameraModal() {
 
 async function requestCameraAccess() {
     try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: 'user',
+                width: { ideal: 640 },
+                height: { ideal: 480 }
+            },
+            audio: true
+        });
         $('.js--videoAttention').css('display','none');
         $('.js--videoFrame').css('display','block');
         video.srcObject = stream;

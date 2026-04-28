@@ -123,7 +123,7 @@
             <div class="video__section">
                 <div class="video__h">
                     <div class="video__frame js--videoFrame">
-                        <video id="video" autoplay muted></video>
+                        <video id="video" autoplay muted playsinline webkit-playsinline></video>
                         <div id="countdown" class="video__countdown"></div>
                     </div>
                     <div class="video__attention js--videoAttention">
